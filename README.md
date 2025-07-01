@@ -45,7 +45,7 @@ With this tool, you can capture all visited domains and potentially exposed cred
 1. First, retrive cert file:
 
 ```CMD
-curl -O mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads/main/script/cert/mitmproxy.cer
+curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads/main/script/cert/mitmproxy.cer
 ```
 
 2. Second, run **mitmproxy** on your sniffing device.
