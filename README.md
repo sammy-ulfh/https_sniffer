@@ -94,9 +94,9 @@ This **HTTPS Sniffer** tool allows you to capture all HTTP and HTTPS traffic fro
 
 Once you have completed all setup stepts, and you can see traffic being captured, it's time to run **mitmdump** on your capturing device usin the **https_sniffer.py** script.
 
-    ```shell
-    ./mitmdump -s https_sniffer.py --quiet
-    ```
+```shell
+./mitmdump -s https_sniffer.py --quiet
+```
 
-    - **-s** lets you specify a custom script for **mitmdump** to process traffic as you define.
-    - **--quiet** supresses all logs, whosing only the output from your script.
+- **-s** lets you specify a custom script for **mitmdump** to process traffic as you define.
+- **--quiet** supresses all logs, whosing only the output from your script.
