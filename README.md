@@ -92,7 +92,7 @@ curl -o mitmproxy.cer https://github.com/sammy-ulfh/https_sniffer/raw/refs/heads
 
     ```CMD
     powershell
-    Import-Certificate -FilePath ".\mitmproxy.cer" -CerStoreLocation Cert:\LocalMachine\Root
+    Import-Certificate -FilePath ".\mitmproxy.cer" -CertStoreLocation Cert:\LocalMachine\Root
     ```
 
 ## How does it work?
